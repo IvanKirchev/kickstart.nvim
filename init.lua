@@ -89,7 +89,7 @@ P.S. You can delete this when you're done too. It's your config now! :)
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-
+require 'remaps'
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
@@ -165,7 +165,8 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
-
+vim.opt.number = true -- Absolute line number
+vim.opt.relativenumber = true -- Relative line numbers
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -265,25 +266,11 @@ require('lazy').setup({
   --                -- Your gitsigns configuration here
   --            })
   --        end,
-  --    }
   --
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`.
   --
   -- See `:help gitsigns` to understand what the configuration keys do
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-    },
-  },
-
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -463,18 +450,6 @@ require('lazy').setup({
   },
 
   -- LSP Plugins
-  {
-    -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
-    -- used for completion, annotations and signatures of Neovim apis
-    'folke/lazydev.nvim',
-    ft = 'lua',
-    opts = {
-      library = {
-        -- Load luvit types when the `vim.uv` word is found
-        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-      },
-    },
-  },
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
@@ -963,7 +938,31 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  {
+    'theprimeagen/harpoon',
+    config = function()
+      local mark = require 'harpoon.mark'
+      local ui = require 'harpoon.ui'
 
+      vim.keymap.set('n', '<leader>a', mark.add_file)
+      vim.keymap.set('n', '<leader>e', ui.toggle_quick_menu)
+      vim.keymap.set('n', '<leader>1', function()
+        ui.nav_file(1)
+      end)
+      vim.keymap.set('n', '<leader>2', function()
+        ui.nav_file(2)
+      end)
+      vim.keymap.set('n', '<leader>3', function()
+        ui.nav_file(3)
+      end)
+      vim.keymap.set('n', '<leader>4', function()
+        ui.nav_file(4)
+      end)
+      vim.keymap.set('n', '<leader>5', function()
+        ui.nav_file(5)
+      end)
+    end,
+  },
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
